@@ -1,6 +1,7 @@
 const ImageModel = require("../../Models/imageModel");
 const UserModel = require("../../Models/userModel");
-const CollectionModel = require("../../Models/collectionModel")
+const CollectionModel = require("../../Models/collectionModel");
+const { token } = require("morgan");
 
 
 const ImageController = {
@@ -63,7 +64,41 @@ const ImageController = {
         } catch (error) {
             res.status(500).json({ msg: "Server Error", error: error.name })
         }
-    }
+    },
+
+    // UP ACTION LIKE, VIEW IMAGE
+    upAction: async (req, res) => {
+        try {
+            const { action } = req.query;
+            const { iid } = req.params;
+            const { token } = req.body
+            const image = await ImageModel.findById(iid);
+            if (!image) return res.status(404).json({ msg: "Image Not Found" })
+            if (action === "view") {
+                image.view += 1;
+                await image.save();
+            }
+            if (action === "like") {
+                await ImageModel.findByIdAndUpdate(iid, { $push: { like: token.id } })
+            }
+            res.status(201).json({ msg: `Action ${action} completed` })
+        } catch (error) {
+            res.status(500).json({ msg: "Server Error", error: error.name })
+        }
+    },
+
+    // UN LIKE ACTION (cid in params, token in headers) (CHECKED)
+    unLike: async (req, res) => {
+        try {
+            const { token } = req.body;
+            const { iid } = req.params;
+            const image = await ImageModel.findByIdAndUpdate(iid, { $pull: { like: token.id } });
+            if (!image) return res.status(404).json({ msg: "Image Not Found" })
+            res.status(201).json({ msg: "Action completed" })
+        } catch (error) {
+            res.status(500).json({ msg: "Server Error", error: error.name })
+        }
+    },
 }
 
 module.exports = ImageController;

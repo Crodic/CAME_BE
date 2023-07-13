@@ -6,8 +6,9 @@ const ImageSchema = new Schema({
     url: { type: String, max: 255, min: 5, required: true, unique: true },
     user: { type: mongoose.Types.ObjectId, ref: "users" },
     collections: [{ type: mongoose.Types.ObjectId, ref: "collections" }],
-    like: { type: Number, default: 0, min: 0 },
+    like: [{ type: mongoose.Types.ObjectId, ref: "users" }],
     view: { type: Number, default: 0, min: 0 },
+    comment: [{ type: mongoose.Types.ObjectId, ref: "comments" }],
     type: { type: String, enum: ['private', "public"], default: "public", trim: true },
     category: { type: mongoose.Types.ObjectId, ref: "categories" },
 }, { timestamps: true })

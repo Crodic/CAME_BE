@@ -76,10 +76,10 @@ const CollectionsController = {
     // UN LIKE ACTION (cid in params, token in headers) (CHECKED)
     unLike: async (req, res) => {
         try {
+            const { token } = req.body;
             const { cid } = req.params;
-            const collection = await CollectionModel.findById(cid);
-            if (collection.like > 0) collection.like -= 1;
-            await collection.save();
+            const collection = await CollectionModel.findByIdAndUpdate(cid, { $pull: { like: token.id } });
+            if (!collection) return res.status(404).json({ msg: "Collection Not Found" })
             res.status(201).json({ msg: "Action completed" })
         } catch (error) {
             res.status(500).json({ msg: "Server Error", error: error.name })

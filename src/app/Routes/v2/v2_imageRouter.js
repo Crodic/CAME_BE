@@ -15,4 +15,10 @@ imageRouter.get("/:id", ImageController.getImageById);
 // DELETE - DELETE IMAGE
 imageRouter.delete("/:id", Middleware.auth, ImageController.deleteImage);
 
+// PUT - LIKE OR VIEW ACTION
+imageRouter.put("/up/:iid", Middleware.auth, ImageController.upAction);
+
+// PUT - UNLIKE
+imageRouter.put("/down/:iid", Middleware.auth, ImageController.unLike);
+
 module.exports = imageRouter;

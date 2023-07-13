@@ -12,6 +12,7 @@ const userRouter = require("./app/Routes/v2/v2_userRouter");
 const categoryRouter = require("./app/Routes/v2/v2_categoryRouter");
 const imageRouter = require("./app/Routes/v2/v2_imageRouter");
 const vipRouter = require("./app/Routes/v2/v2_vipRouter");
+const commentRouter = require("./app/Routes/v2/v2_commentRouter");
 
 // Config app
 const app = express();
@@ -34,6 +35,7 @@ app.use("/v2/api/category", categoryRouter);
 app.use("/v2/api/image", imageRouter);
 app.use("/v2/api/collection", collectionRouter);
 app.use("/v2/api/vip", vipRouter);
+app.use("/v2/api/comment", commentRouter);
 
 
 // App Start
