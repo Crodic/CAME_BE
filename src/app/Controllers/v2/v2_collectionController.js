@@ -56,16 +56,19 @@ const CollectionsController = {
         try {
             const { action } = req.query;
             const { cid } = req.params;
+            const { token } = req.body
             const collections = await CollectionModel.findById(cid);
+            if (!collections) return res.status(404).json({ msg: "Collection Not Found" })
             if (action === "view") {
                 collections.view += 1;
+                await collections.save();
             }
             if (action === "like") {
-                collections.like += 1;
+                await CollectionModel.findByIdAndUpdate(cid, { $push: { like: token.id } })
             }
-            await collections.save();
             res.status(201).json({ msg: `Action ${action} completed` })
         } catch (error) {
+            console.log(error)
             res.status(500).json({ msg: "Server Error", error: error.name })
         }
     },
