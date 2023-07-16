@@ -34,6 +34,12 @@ userRouter.put("/password/:id", Middleware.auth, Middleware.findAccount, Middlew
 // POST - REFRESH TOKEN
 userRouter.post("/refresh/:id", Middleware.checkRefreshToken, Middleware.deleteRefreshToken, UserController.refreshToken);
 
+// GET - GET USER BY ID
+userRouter.get("/:id", UserController.getUserById);
+
+// POST - LOGIN ADMIN
+userRouter.post("/login_admin", Middleware.findAccount, Middleware.checkRoleAdmin, Middleware.validatePassword, UserController.login);
+
 
 
 module.exports = userRouter;

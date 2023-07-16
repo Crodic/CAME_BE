@@ -78,10 +78,11 @@ const Middleware = {
     // Define role Admin (Authentication - Role Admin)
     checkRoleAdmin: async (req, res, next) => {
         try {
-            const { role } = req.body.token;
-            if (role !== "admin") return res.status(403).json({ msg: "Your role cannot access" });
-            next();
+            const { role } = req.body.token || req.body;
+            if (role != "admin") return res.status(403).json({ msg: "Your role cannot access", status: role !== "admin" });
+            return next();
         } catch (error) {
+            console.log(error);
             res.status(500).json({ msg: "Server error", error: error.name })
         }
     },
@@ -96,7 +97,9 @@ const Middleware = {
         } catch (error) {
             res.status(500).json({ msg: "Server error", error: error.name })
         }
-    }
+    },
+
+
 }
 
 module.exports = Middleware;
